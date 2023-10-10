@@ -1,0 +1,31 @@
+*** Settings ***
+Documentation    Yahoo Finance registration
+Library           SeleniumLibrary
+Library           Selenium WebDriver
+
+*** Variables ***
+${BROWSER}        chrome
+${URL}            https://finance.yahoo.com/
+
+*** Test Cases ***
+Create Yahoo Finance Account
+    Open Browser    ${URL}    ${BROWSER}
+    ${driver}    Get Webdriver Instance
+    ${finance_page}    FinancePage    ${driver}
+    ${registration_page}    RegistrationPage    ${driver}
+    ${first_name}    Set Variable    John
+    ${last_name}     Set Variable    Doe
+    ${email}         Set Variable    johndoe@example.com
+    ${password}      Set Variable    MySecurePassword
+
+    Click Element    ${finance_page.sign_in_link}
+    Wait Until Element Is Visible    ${registration_page.first_name_field}
+    ${registration_page}    Page Should Contain Element    ${registration_page.first_name_field}
+    
+    ${registration_page.fill_registration_form}    ${first_name}    ${last_name}    ${email}    ${password}
+    ${registration_page.submit_registration_form}
+
+*** Keywords ***
+Page Should Contain Element
+    [Arguments]    ${locator}
+    Page Should Contain Element    ${locator}
